@@ -9,6 +9,10 @@
   <meta property="og:title" content="Professional Betting Tips">
   <meta property="og:description" content="Expert football predictions. 9 years. 72%+ win rate.">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="/assets/images/icon.png">
+  <meta name="theme-color" content="#07090F">
+  <link rel="icon" type="image/png" href="/assets/images/icon.png">
+  <link rel="apple-touch-icon" href="/assets/images/icon.png">
   <link rel="stylesheet" href="css/style.css">
   <!-- Paystack -->
   <script src="https://js.paystack.co/v1/inline.js"></script>
@@ -23,7 +27,7 @@
   <nav class="navbar">
     <div class="container nav-inner">
       <a href="/" class="nav-logo">
-        <div class="nav-logo-icon">PB</div>
+        <div class="nav-logo-icon"><img src="/assets/images/pbtlogo.png" alt="Professional Betting Tips"></div>
         <div class="nav-logo-text">Pro<span>Betting</span>Tips</div>
       </a>
 
@@ -472,7 +476,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="nav-logo" style="margin-bottom:0">
-            <div class="nav-logo-icon">PB</div>
+            <div class="nav-logo-icon"><img src="/assets/images/pbtlogo.png" alt="Professional Betting Tips"></div>
             <div class="nav-logo-text">Pro<span>Betting</span>Tips</div>
           </div>
           <p>Expert football betting tips backed by 9 years of track record. Trusted by bettors across Africa.</p>

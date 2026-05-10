@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Professional Betting Tips</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .admin-grid { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; padding: 32px 0; }
+    .admin-sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; position: sticky; top: 80px; }
+    .admin-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-3); margin-bottom: 4px; transition: all 0.2s; }
+    .admin-nav a:hover, .admin-nav a.active { background: var(--bg-3); color: var(--text); }
+    .admin-content { }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+    .form-section-title { font-family: var(--font-head); font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    select.form-select { width: 100%; background: var(--bg-3); border: 1.5px solid var(--border); border-radius: 8px; padding: 11px 14px; font-size: 14px; color: var(--text); }
+    select.form-select:focus { outline: none; border-color: var(--gold); }
+    textarea.form-textarea { width: 100%; background: var(--bg-3); border: 1.5px solid var(--border); border-radius: 8px; padding: 11px 14px; font-size: 14px; color: var(--text); resize: vertical; min-height: 80px; }
+    textarea.form-textarea:focus { outline: none; border-color: var(--gold); }
+    .predictions-table { width: 100%; border-collapse: collapse; }
+    .predictions-table th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--border); }
+    .predictions-table td { padding: 12px 14px; font-size: 14px; border-bottom: 1px solid var(--border); }
+    .predictions-table tr:hover td { background: var(--bg-3); }
+    .result-badge { padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .result-badge.win  { background: rgba(34,197,94,0.15); color: var(--green); }
+    .result-badge.loss { background: rgba(239,68,68,0.15); color: var(--red); }
+    .result-badge.pending { background: var(--bg-3); color: var(--text-3); }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; }
+    input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--gold); }
+  </style>
+</head>
+<body data-page="admin">
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">PB</div>
+        <div class="nav-logo-text">Pro<span>Betting</span>Tips <span style="color:var(--red); font-size:12px; margin-left:6px;">ADMIN</span></div>
+      </a>
+      <div class="nav-actions">
+        <a href="/" class="btn btn-ghost btn-sm">← Back to Site</a>
+        <button class="btn btn-outline btn-sm" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="admin-grid">
+
+      <!-- Sidebar -->
+      <div class="admin-sidebar">
+        <div class="section-tag mb-16">Admin Panel</div>
+        <nav class="admin-nav">
+          <a href="#add-tip" class="active">➕ Add Tip</a>
+          <a href="#manage-tips">📋 Manage Tips</a>
+          <a href="#highlights">🎬 Highlights</a>
+          <a href="#subscriptions">💰 Subscriptions</a>
+          <a href="#users">👥 Users</a>
+        </nav>
+
+        <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+          <div class="section-tag mb-8">Quick Stats</div>
+          <div id="admin-stats" style="font-size:13px; color:var(--text-2); line-height:2;">
+            Loading...
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="admin-content">
+        <div id="admin-gate" class="form-section" style="text-align:center;">
+          <h2 style="margin-bottom:12px;">Admin Access Required</h2>
+          <p style="color:var(--text-2); margin-bottom:20px;">Sign in with your admin account.</p>
+          <form id="admin-login-form">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="admin-email" required placeholder="admin@profbettingtips.com">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="admin-password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn btn-gold btn-full mt-16">Sign In as Admin</button>
+          </form>
+        </div>
+
+        <div id="admin-panel" class="hidden">
+
+          <!-- Add Tip Section -->
+          <div id="add-tip" class="form-section">
+            <div class="form-section-title">➕ Post New Prediction</div>
+            <form id="add-tip-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Home Team</label>
+                  <input type="text" id="tip-home" required placeholder="e.g. Man City">
+                </div>
+                <div class="form-group">
+                  <label>Away Team</label>
+                  <input type="text" id="tip-away" required placeholder="e.g. Arsenal">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>League</label>
+                  <input type="text" id="tip-league" required placeholder="e.g. Premier League">
+                </div>
+                <div class="form-group">
+                  <label>Kick-off Time</label>
+                  <input type="text" id="tip-time" placeholder="e.g. 20:00">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Match Date</label>
+                  <input type="date" id="tip-date" required>
+                </div>
+                <div class="form-group">
+                  <label>Category</label>
+                  <select class="form-select" id="tip-category">
+                    <option value="daily">Daily</option>
+                    <option value="weekend">Weekend</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Prediction</label>
+                  <input type="text" id="tip-prediction" required placeholder="e.g. Home Win, BTTS, Over 2.5">
+                </div>
+                <div class="form-group">
+                  <label>Odds</label>
+                  <input type="number" id="tip-odds" required placeholder="e.g. 1.85" step="0.01" min="1">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Confidence</label>
+                  <input type="text" id="tip-confidence" placeholder="e.g. 85%">
+                </div>
+                <div class="form-group" style="display:flex; align-items:flex-end; gap:16px; padding-bottom:2px;">
+                  <label class="checkbox-group" style="margin:0; flex-direction:row;">
+                    <input type="checkbox" id="tip-premium" checked>
+                    <span>Premium tip?</span>
+                  </label>
+                  <label class="checkbox-group" style="margin:0; flex-direction:row;">
+                    <input type="checkbox" id="tip-featured">
+                    <span>Featured?</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Analysis / Notes (optional)</label>
+                <textarea class="form-textarea" id="tip-analysis" placeholder="Brief expert reasoning for this pick..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-gold">Post Prediction</button>
+            </form>
+          </div>
+
+          <!-- Manage Tips -->
+          <div id="manage-tips" class="form-section">
+            <div class="form-section-title" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>📋 Today's Predictions</span>
+              <button class="btn btn-ghost btn-sm" onclick="loadAdminTips()">↻ Refresh</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="predictions-table" id="tips-table">
+                <thead>
+                  <tr>
+                    <th>Match</th>
+                    <th>League</th>
+                    <th>Time</th>
+                    <th>Prediction</th>
+                    <th>Odds</th>
+                    <th>Type</th>
+                    <th>Result</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tips-table-body">
+                  <tr><td colspan="8" style="color:var(--text-3); text-align:center; padding:24px;">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Highlights -->
+          <div id="highlights" class="form-section">
+            <div class="form-section-title">🎬 Add Match Highlight</div>
+            <form id="add-highlight-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Title</label>
+                  <input type="text" id="hl-title" required placeholder="e.g. Man City 3-1 Arsenal — Highlights">
+                </div>
+                <div class="form-group">
+                  <label>League</label>
+                  <input type="text" id="hl-league" placeholder="e.g. Premier League">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Home Team</label>
+                  <input type="text" id="hl-home" required>
+                </div>
+                <div class="form-group">
+                  <label>Away Team</label>
+                  <input type="text" id="hl-away" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Score (e.g. 3 - 1)</label>
+                  <input type="text" id="hl-score" placeholder="3 - 1">
+                </div>
+                <div class="form-group">
+                  <label>Match Date</label>
+                  <input type="date" id="hl-date">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Video URL (YouTube, etc.)</label>
+                <input type="url" id="hl-video" placeholder="https://youtube.com/watch?v=...">
+              </div>
+              <button type="submit" class="btn btn-gold">Add Highlight</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    // Set today's date as default
+    document.getElementById('tip-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('hl-date').value  = new Date().toISOString().split('T')[0];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check auth
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) return;
+      showAdminPanel();
+      loadAdminTips();
+      loadAdminStats();
+    });
+
+    document.getElementById('admin-login-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value;
+      const pass  = document.getElementById('admin-password').value;
+      try {
+        await signIn(email, pass);
+        showAdminPanel();
+        loadAdminTips();
+        loadAdminStats();
+      } catch (err) {
+        showToast('❌ ' + err.message, 'error');
+      }
+    });
+
+    function showAdminPanel() {
+      document.getElementById('admin-gate').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+    }
+
+    document.getElementById('add-tip-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const tip = {
+        home_team:     document.getElementById('tip-home').value,
+        away_team:     document.getElementById('tip-away').value,
+        league:        document.getElementById('tip-league').value,
+        match_date:    document.getElementById('tip-date').value,
+        kick_off_time: document.getElementById('tip-time').value,
+        prediction:    document.getElementById('tip-prediction').value,
+        odds:          parseFloat(document.getElementById('tip-odds').value),
+        confidence:    document.getElementById('tip-confidence').value,
+        category:      document.getElementById('tip-category').value,
+        is_premium:    document.getElementById('tip-premium').checked,
+        is_featured:   document.getElementById('tip-featured').checked,
+        analysis:      document.getElementById('tip-analysis').value,
+        result:        'PENDING',
+      };
+
+      const { error } = await sb.from('predictions').insert(tip);
+      if (error) { showToast('❌ ' + error.message, 'error'); return; }
+      showToast('✅ Prediction posted!', 'success');
+      e.target.reset();
+      document.getElementById('tip-date').value = new Date().toISOString().split('T')[0];
+      loadAdminTips();
+    });
+
+    document.getElementById('add-highlight-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const hl = {
+        title:      document.getElementById('hl-title').value,
+        home_team:  document.getElementById('hl-home').value,
+        away_team:  document.getElementById('hl-away').value,
+        league:     document.getElementById('hl-league').value,
+        score:      document.getElementById('hl-score').value,
+        match_date: document.getElementById('hl-date').value,
+        video_url:  document.getElementById('hl-video').value,
+      };
+      const { error } = await sb.from('highlights').insert(hl);
+      if (error) { showToast('❌ ' + error.message, 'error'); return; }
+      showToast('✅ Highlight added!', 'success');
+      e.target.reset();
+    });
+
+    async function loadAdminTips() {
+      const { data } = await sb.from('predictions')
+        .select('*')
+        .eq('match_date', new Date().toISOString().split('T')[0])
+        .order('kick_off_time');
+
+      const tbody = document.getElementById('tips-table-body');
+      if (!data?.length) { tbody.innerHTML = '<tr><td colspan="8" style="color:var(--text-3); text-align:center; padding:24px;">No predictions today yet.</td></tr>'; return; }
+
+      tbody.innerHTML = data.map(t => `
+        <tr>
+          <td>${t.home_team} vs ${t.away_team}</td>
+          <td style="color:var(--text-3)">${t.league}</td>
+          <td style="font-family:var(--font-mono)">${t.kick_off_time || '--'}</td>
+          <td>${t.prediction}</td>
+          <td style="color:var(--gold); font-family:var(--font-mono)">${t.odds}</td>
+          <td>${t.is_premium ? '🔒 Premium' : '🆓 Free'}</td>
+          <td><span class="result-badge ${t.result?.toLowerCase() || 'pending'}">${t.result || 'PENDING'}</span></td>
+          <td>
+            <select onchange="updateResult('${t.id}', this.value)" style="background:var(--bg-3); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:4px 8px; font-size:12px;">
+              <option value="PENDING" ${t.result==='PENDING'?'selected':''}>Pending</option>
+              <option value="WIN"     ${t.result==='WIN'    ?'selected':''}>Win</option>
+              <option value="LOSS"    ${t.result==='LOSS'   ?'selected':''}>Loss</option>
+              <option value="VOID"    ${t.result==='VOID'   ?'selected':''}>Void</option>
+            </select>
+            <button onclick="deleteTip('${t.id}')" style="background:none; border:none; color:var(--red); cursor:pointer; margin-left:6px; font-size:16px;">🗑</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    async function updateResult(id, result) {
+      const { error } = await sb.from('predictions').update({ result }).eq('id', id);
+      if (error) showToast('❌ ' + error.message, 'error');
+      else showToast('✅ Result updated!', 'success');
+    }
+
+    async function deleteTip(id) {
+      if (!confirm('Delete this prediction?')) return;
+      const { error } = await sb.from('predictions').delete().eq('id', id);
+      if (error) showToast('❌ ' + error.message, 'error');
+      else { showToast('✅ Deleted.', 'success'); loadAdminTips(); }
+    }
+
+    async function loadAdminStats() {
+      const today = new Date().toISOString().split('T')[0];
+      const [tipsRes, subsRes] = await Promise.all([
+        sb.from('predictions').select('id', { count: 'exact' }).eq('match_date', today),
+        sb.from('subscriptions').select('id, price_paid', { count: 'exact' }).eq('status', 'active'),
+      ]);
+
+      const revenue = subsRes.data?.reduce((acc, s) => acc + Number(s.price_paid), 0) || 0;
+      document.getElementById('admin-stats').innerHTML = `
+        📋 Tips today: <strong>${tipsRes.count || 0}</strong><br>
+        💰 Active subs: <strong>${subsRes.count || 0}</strong><br>
+        📈 Total revenue: <strong>KES ${revenue.toLocaleString()}</strong>
+      `;
+    }
+  </script>
+</body>
+</html>

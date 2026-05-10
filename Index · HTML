@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Betting Tips — Daily Football Predictions & Premium Odds</title>
+  <meta name="description" content="Expert football betting tips, daily predictions, weekend odds and premium picks. 9 years of proven results. Join 50,000+ winners on our Facebook page.">
+  <meta name="keywords" content="betting tips, football predictions, daily odds, weekend tips, premium betting tips, kenya betting">
+  <meta property="og:title" content="Professional Betting Tips">
+  <meta property="og:description" content="Expert football predictions. 9 years. 72%+ win rate.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Paystack -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Monetag Ad Script (replace with your Publisher ID) -->
+  <!-- <script src="//oplerfino.com/YOUR_MONETAG_ID/invoke.js" async></script> -->
+</head>
+<body data-page="home">
+
+  <!-- ── Nav ─────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">PB</div>
+        <div class="nav-logo-text">Pro<span>Betting</span>Tips</div>
+      </a>
+
+      <div class="nav-links">
+        <a href="/" class="active">Home</a>
+        <a href="/daily.html">Daily Odds</a>
+        <a href="/weekend.html">Weekend Odds</a>
+        <a href="/monthly.html">Monthly Odds</a>
+        <a href="/highlights.html">Highlights</a>
+        <a href="/pricing.html">Premium</a>
+      </div>
+
+      <div class="nav-actions">
+        <button id="nav-login-btn" class="btn btn-outline btn-sm" onclick="openAuthModal('login')">Sign In</button>
+        <div id="nav-user-menu" class="hidden flex items-center gap-8">
+          <a href="/account.html" class="btn btn-ghost btn-sm" id="nav-user-name">Account</a>
+          <button class="btn btn-outline btn-sm" onclick="signOut()">Out</button>
+        </div>
+        <button id="hamburger" class="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Mobile Nav ────────────────────────────────────────────── -->
+  <div id="mobile-nav" class="mobile-nav">
+    <a href="/">🏠 Home</a>
+    <a href="/daily.html">⚽ Daily Odds</a>
+    <a href="/weekend.html">📅 Weekend Odds</a>
+    <a href="/monthly.html">📆 Monthly Odds</a>
+    <a href="/highlights.html">🎬 Highlights</a>
+    <a href="/pricing.html">⭐ Premium</a>
+    <a href="/account.html">👤 My Account</a>
+  </div>
+
+  <!-- ── Ticker ──────────────────────────────────────────────── -->
+  <div class="ticker-bar">
+    <div class="ticker-label">⚽ Live</div>
+    <div class="ticker-track">
+      <div class="ticker-content" id="ticker-content">
+        <span class="ticker-item">Man City <span class="vs">vs</span> Arsenal &nbsp;|&nbsp; <span class="odds">1.90</span> &nbsp;·&nbsp; 20:00</span>
+        <span class="ticker-item">Real Madrid <span class="vs">vs</span> Barcelona &nbsp;|&nbsp; <span class="odds">2.10</span> &nbsp;·&nbsp; 21:00</span>
+        <span class="ticker-item">PSG <span class="vs">vs</span> Dortmund &nbsp;|&nbsp; <span class="odds">1.75</span> &nbsp;·&nbsp; 20:45</span>
+        <span class="ticker-item">Bayern <span class="vs">vs</span> Juventus &nbsp;|&nbsp; <span class="odds">1.65</span> &nbsp;·&nbsp; 21:00</span>
+        <span class="ticker-item">Liverpool <span class="vs">vs</span> Chelsea &nbsp;|&nbsp; <span class="odds">2.20</span> &nbsp;·&nbsp; 17:30</span>
+        <span class="ticker-item">Inter Milan <span class="vs">vs</span> AC Milan &nbsp;|&nbsp; <span class="odds">2.50</span> &nbsp;·&nbsp; 20:00</span>
+        <!-- duplicated for seamless scroll -->
+        <span class="ticker-item">Man City <span class="vs">vs</span> Arsenal &nbsp;|&nbsp; <span class="odds">1.90</span> &nbsp;·&nbsp; 20:00</span>
+        <span class="ticker-item">Real Madrid <span class="vs">vs</span> Barcelona &nbsp;|&nbsp; <span class="odds">2.10</span> &nbsp;·&nbsp; 21:00</span>
+        <span class="ticker-item">PSG <span class="vs">vs</span> Dortmund &nbsp;|&nbsp; <span class="odds">1.75</span> &nbsp;·&nbsp; 20:45</span>
+        <span class="ticker-item">Bayern <span class="vs">vs</span> Juventus &nbsp;|&nbsp; <span class="odds">1.65</span> &nbsp;·&nbsp; 21:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Monetag Ad Slot ─────────────────────────────────────── -->
+  <div class="container">
+    <div class="ad-slot ad-slot-banner" id="ad-top">Monetag Ad — 728×90</div>
+  </div>
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="fade-up">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          9 Years of Winning Tips
+        </div>
+        <h1>Football Predictions<br>Built on <span>Data.</span></h1>
+        <p class="hero-sub">
+          Daily expert tips, weekend accumulators and premium locked odds — trusted by 50,000+ bettors across Africa and beyond.
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="val">72%</div>
+            <div class="lbl">Win Rate</div>
+          </div>
+          <div class="hero-stat">
+            <div class="val">9+</div>
+            <div class="lbl">Years Active</div>
+          </div>
+          <div class="hero-stat">
+            <div class="val">50K</div>
+            <div class="lbl">FB Followers</div>
+          </div>
+          <div class="hero-stat">
+            <div class="val">Daily</div>
+            <div class="lbl">New Tips</div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="/daily.html" class="btn btn-gold btn-lg">Today's Tips ⚽</a>
+          <a href="/pricing.html" class="btn btn-outline btn-lg">Get Premium →</a>
+        </div>
+      </div>
+
+      <!-- Featured Match Card -->
+      <div class="featured-card fade-up stagger-2" id="featured-home">
+        <div class="featured-header">
+          <span class="featured-label" id="featured-league">⭐ Today's Feature Match</span>
+          <span class="live-badge"><span class="dot"></span> Today</span>
+        </div>
+        <div class="featured-body">
+          <div class="match-teams">
+            <div class="team">
+              <div class="team-shield" id="featured-home-init">MC</div>
+              <div class="team-name featured-home-name">Man City</div>
+            </div>
+            <div class="match-vs">VS</div>
+            <div class="team">
+              <div class="team-shield" id="featured-away-init">ARS</div>
+              <div class="team-name featured-away-name">Arsenal</div>
+            </div>
+          </div>
+          <div class="match-odds-row">
+            <div class="odd-chip active">
+              <div class="label">Home</div>
+              <div class="value">2.10</div>
+            </div>
+            <div class="odd-chip">
+              <div class="label">Draw</div>
+              <div class="value">3.50</div>
+            </div>
+            <div class="odd-chip">
+              <div class="label">Away</div>
+              <div class="value">3.20</div>
+            </div>
+          </div>
+          <div class="prediction-row">
+            <div>
+              <div class="pred-label">Our Prediction</div>
+              <div class="pred-value featured-pred-val">Home Win</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="pred-label">Odds</div>
+              <div class="pred-value featured-odds-val">2.10</div>
+            </div>
+          </div>
+        </div>
+        <div class="featured-footer">
+          <span class="featured-time">⏰ 20:00 EAT</span>
+          <span>Premier League · Matchday 34</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stats Strip ─────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="stats-row fade-up">
+        <div class="stat-block">
+          <span class="num">72%</span>
+          <span class="label">Overall Win Rate</span>
+        </div>
+        <div class="stat-block">
+          <span class="num">2,400+</span>
+          <span class="label">Tips Posted</span>
+        </div>
+        <div class="stat-block">
+          <span class="num">9 Yrs</span>
+          <span class="label">Track Record</span>
+        </div>
+        <div class="stat-block">
+          <span class="num">Daily</span>
+          <span class="label">Fresh Predictions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Free Today's Tips ──────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-tag">Free Tips</div>
+          <h2>Today's Predictions</h2>
+        </div>
+        <a href="/daily.html" class="btn btn-outline btn-sm">View All →</a>
+      </div>
+
+      <div class="tips-grid" id="free-tips-grid">
+        <!-- Skeleton placeholders -->
+        <div class="tip-card">
+          <div class="tip-card-header"><span class="league-tag">Premier League</span><span class="tip-time">20:00</span></div>
+          <div class="tip-body">
+            <div class="tip-teams"><span class="home">Man City</span><span class="vs-small">VS</span><span class="away">Arsenal</span></div>
+            <div class="tip-meta">
+              <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">Home Win</div></div>
+              <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">2.10</div></div>
+              <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">88%</div></div>
+              <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-header"><span class="league-tag">La Liga</span><span class="tip-time">21:00</span></div>
+          <div class="tip-body">
+            <div class="tip-teams"><span class="home">Real Madrid</span><span class="vs-small">VS</span><span class="away">Barcelona</span></div>
+            <div class="tip-meta">
+              <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">Both to Score</div></div>
+              <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">1.85</div></div>
+              <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">82%</div></div>
+              <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-header"><span class="league-tag">Serie A</span><span class="tip-time">20:45</span></div>
+          <div class="tip-body">
+            <div class="tip-teams"><span class="home">Inter Milan</span><span class="vs-small">VS</span><span class="away">AC Milan</span></div>
+            <div class="tip-meta">
+              <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">Over 2.5</div></div>
+              <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">1.75</div></div>
+              <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">79%</div></div>
+              <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Monetag Mid-page Ad ─────────────────────────────────── -->
+  <div class="container">
+    <div class="ad-slot ad-slot-banner" id="ad-mid">Monetag Ad — 728×90</div>
+  </div>
+
+  <!-- ── Pricing Section ────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-tag">Premium Odds</div>
+          <h2>Choose Your Plan</h2>
+        </div>
+        <a href="/pricing.html" class="btn btn-outline btn-sm">Full Details →</a>
+      </div>
+
+      <div class="pricing-tabs">
+        <button class="pricing-tab active" data-tab="daily">Daily Odds</button>
+        <button class="pricing-tab" data-tab="weekend">Weekend Odds</button>
+        <button class="pricing-tab" data-tab="monthly">Monthly Odds</button>
+      </div>
+
+      <!-- Daily Pane -->
+      <div class="pricing-pane" id="pane-daily">
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="plan-icon">🎯</div>
+            <div class="plan-name">Starter</div>
+            <div class="plan-odds-count">4</div>
+            <div class="plan-odds-label">Curated Odds</div>
+            <div class="plan-price"><span class="currency">KES </span>99</div>
+            <div class="plan-period">Per day</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 4 hand-picked tips</li>
+              <li class="plan-feature"><span class="check">✓</span> Match analysis notes</li>
+              <li class="plan-feature"><span class="check">✓</span> Confidence ratings</li>
+              <li class="plan-feature"><span class="check">✓</span> Instant delivery</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openCheckoutModal('daily','starter')">Get Starter</button>
+            <div class="pay-methods">
+              <span class="pay-badge">Paystack</span>
+              <span class="pay-badge">M-Pesa</span>
+              <span class="pay-badge">PayPal</span>
+            </div>
+          </div>
+
+          <div class="price-card featured-plan">
+            <div class="plan-icon">⭐</div>
+            <div class="plan-name">Standard</div>
+            <div class="plan-odds-count">8</div>
+            <div class="plan-odds-label">Curated Odds</div>
+            <div class="plan-price"><span class="currency">KES </span>149</div>
+            <div class="plan-period">Per day</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 8 expert tips</li>
+              <li class="plan-feature"><span class="check">✓</span> In-depth analysis</li>
+              <li class="plan-feature"><span class="check">✓</span> Confidence ratings</li>
+              <li class="plan-feature"><span class="check">✓</span> Priority WhatsApp alert</li>
+            </ul>
+            <button class="btn btn-gold btn-full" onclick="openCheckoutModal('daily','standard')">Get Standard</button>
+            <div class="pay-methods">
+              <span class="pay-badge">Paystack</span>
+              <span class="pay-badge">M-Pesa</span>
+              <span class="pay-badge">PayPal</span>
+            </div>
+          </div>
+
+          <div class="price-card">
+            <div class="plan-icon">🏆</div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-odds-count">10</div>
+            <div class="plan-odds-label">Curated Odds</div>
+            <div class="plan-price"><span class="currency">KES </span>199</div>
+            <div class="plan-period">Per day</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 10 premium picks</li>
+              <li class="plan-feature"><span class="check">✓</span> Full statistical report</li>
+              <li class="plan-feature"><span class="check">✓</span> Confidence ratings</li>
+              <li class="plan-feature"><span class="check">✓</span> VIP WhatsApp channel</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openCheckoutModal('daily','premium')">Get Premium</button>
+            <div class="pay-methods">
+              <span class="pay-badge">Paystack</span>
+              <span class="pay-badge">M-Pesa</span>
+              <span class="pay-badge">PayPal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekend Pane -->
+      <div class="pricing-pane hidden" id="pane-weekend">
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="plan-icon">🎯</div>
+            <div class="plan-name">Starter</div>
+            <div class="plan-odds-count">4</div>
+            <div class="plan-odds-label">Weekend Odds</div>
+            <div class="plan-price"><span class="currency">KES </span>99</div>
+            <div class="plan-period">This weekend</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 4 weekend picks</li>
+              <li class="plan-feature"><span class="check">✓</span> Sat + Sun coverage</li>
+              <li class="plan-feature"><span class="check">✓</span> Confidence ratings</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openCheckoutModal('weekend','starter')">Get Starter</button>
+          </div>
+          <div class="price-card featured-plan">
+            <div class="plan-icon">⭐</div>
+            <div class="plan-name">Standard</div>
+            <div class="plan-odds-count">8</div>
+            <div class="plan-odds-label">Weekend Odds</div>
+            <div class="plan-price"><span class="currency">KES </span>149</div>
+            <div class="plan-period">This weekend</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 8 weekend picks</li>
+              <li class="plan-feature"><span class="check">✓</span> Full weekend coverage</li>
+              <li class="plan-feature"><span class="check">✓</span> Analysis notes</li>
+            </ul>
+            <button class="btn btn-gold btn-full" onclick="openCheckoutModal('weekend','standard')">Get Standard</button>
+          </div>
+          <div class="price-card">
+            <div class="plan-icon">🏆</div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-odds-count">10</div>
+            <div class="plan-odds-label">Weekend Odds</div>
+            <div class="plan-price"><span class="currency">KES </span>199</div>
+            <div class="plan-period">This weekend</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 10 weekend picks</li>
+              <li class="plan-feature"><span class="check">✓</span> VIP channel access</li>
+              <li class="plan-feature"><span class="check">✓</span> Statistical reports</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openCheckoutModal('weekend','premium')">Get Premium</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Pane -->
+      <div class="pricing-pane hidden" id="pane-monthly">
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="plan-icon">🎯</div>
+            <div class="plan-name">Starter</div>
+            <div class="plan-odds-count">4</div>
+            <div class="plan-odds-label">Monthly Odds/day</div>
+            <div class="plan-price"><span class="currency">KES </span>99</div>
+            <div class="plan-period">Per month (30 days)</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 4 daily tips all month</li>
+              <li class="plan-feature"><span class="check">✓</span> Monthly fixtures preview</li>
+              <li class="plan-feature"><span class="check">✓</span> Performance tracking</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openCheckoutModal('monthly','starter')">Get Starter</button>
+          </div>
+          <div class="price-card featured-plan">
+            <div class="plan-icon">⭐</div>
+            <div class="plan-name">Standard</div>
+            <div class="plan-odds-count">8</div>
+            <div class="plan-odds-label">Monthly Odds/day</div>
+            <div class="plan-price"><span class="currency">KES </span>149</div>
+            <div class="plan-period">Per month (30 days)</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 8 daily tips all month</li>
+              <li class="plan-feature"><span class="check">✓</span> Monthly ROI reports</li>
+              <li class="plan-feature"><span class="check">✓</span> Priority alerts</li>
+            </ul>
+            <button class="btn btn-gold btn-full" onclick="openCheckoutModal('monthly','standard')">Get Standard</button>
+          </div>
+          <div class="price-card">
+            <div class="plan-icon">🏆</div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-odds-count">10</div>
+            <div class="plan-odds-label">Monthly Odds/day</div>
+            <div class="plan-price"><span class="currency">KES </span>199</div>
+            <div class="plan-period">Per month (30 days)</div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="check">✓</span> 10 daily tips all month</li>
+              <li class="plan-feature"><span class="check">✓</span> Full VIP access</li>
+              <li class="plan-feature"><span class="check">✓</span> WhatsApp VIP channel</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openCheckoutModal('monthly','premium')">Get Premium</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Facebook CTA ────────────────────────────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="fb-cta-section">
+        <div class="fb-cta-text">
+          <div class="section-tag">9 Years on Facebook</div>
+          <h2>Join <span class="text-gold">50,000+</span> Winners</h2>
+          <p>Follow our Facebook page for free daily tips, match previews, live score updates and community discussions. We've been consistent since 2016 — and we're just getting started.</p>
+        </div>
+        <div class="fb-actions">
+          <div class="fb-page-count">
+            <strong>50,000+</strong><br>Followers &amp; Growing
+          </div>
+          <a href="https://facebook.com/ProffesionalBettingTips" target="_blank" rel="noopener" class="btn btn-fb btn-lg">
+            Follow on Facebook →
+          </a>
+          <a href="/daily.html" class="btn btn-outline">See Today's Free Tips</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Bottom Ad ───────────────────────────────────────────── -->
+  <div class="container">
+    <div class="ad-slot ad-slot-banner" id="ad-bottom">Monetag Ad — 728×90</div>
+  </div>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:0">
+            <div class="nav-logo-icon">PB</div>
+            <div class="nav-logo-text">Pro<span>Betting</span>Tips</div>
+          </div>
+          <p>Expert football betting tips backed by 9 years of track record. Trusted by bettors across Africa.</p>
+          <div class="disclaimer">
+            ⚠️ <strong>Disclaimer:</strong> Betting involves risk. Tips are for informational purposes only. Please gamble responsibly. Only bet what you can afford to lose. 18+
+          </div>
+          <a href="https://facebook.com/ProffesionalBettingTips" target="_blank" class="btn btn-fb btn-sm">Follow us on Facebook</a>
+        </div>
+
+        <div>
+          <div class="footer-heading">Odds Categories</div>
+          <div class="footer-links">
+            <a href="/daily.html">Daily Odds</a>
+            <a href="/weekend.html">Weekend Odds</a>
+            <a href="/monthly.html">Monthly Odds</a>
+            <a href="/highlights.html">Match Highlights</a>
+            <a href="/pricing.html">Premium Plans</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-heading">Account</div>
+          <div class="footer-links">
+            <a href="/account.html">My Account</a>
+            <a href="#" onclick="openAuthModal('signup')">Create Account</a>
+            <a href="#" onclick="openAuthModal('login')">Sign In</a>
+            <a href="/pricing.html">Buy Premium</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-heading">Info</div>
+          <div class="footer-links">
+            <a href="/about.html">About Us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/privacy.html">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2016–2025 Professional Betting Tips. All rights reserved.</span>
+        <span>Built for winners 🏆</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Auth Modal ─────────────────────────────────────────── -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal" style="position:relative;">
+      <button class="modal-close" onclick="closeAuthModal()">×</button>
+      <div id="auth-mode" data-mode="login">
+        <h2 id="auth-title">Welcome Back</h2>
+        <p id="auth-subtitle">Sign in to access your premium tips</p>
+        <form id="auth-form">
+          <div class="form-group hidden" id="auth-name-group">
+            <label for="auth-name">Full Name</label>
+            <input type="text" id="auth-name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="auth-email">Email Address</label>
+            <input type="email" id="auth-email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" id="auth-submit-btn" class="btn btn-gold btn-full mt-16">Sign In</button>
+        </form>
+        <p class="mt-16" style="font-size:13px; color:var(--text-3); text-align:center;" id="auth-switch-link">
+          Don't have an account? <a href="#" onclick="setAuthMode('signup')" style="color:var(--gold);">Create one</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Checkout Modal ─────────────────────────────────────── -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal" style="position:relative; max-width:460px;">
+      <button class="modal-close" onclick="closeCheckoutModal()">×</button>
+      <h2>Unlock <span id="checkout-category">Daily Odds</span></h2>
+      <p>Select your package and complete payment to access premium tips.</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px;">
+        <button class="payment-opt checkout-plan-opt" data-plan="starter" onclick="selectCheckoutPlan('starter')" style="font-size:12px;">
+          <strong>4 Odds</strong><br>KES 99
+        </button>
+        <button class="payment-opt checkout-plan-opt selected" data-plan="standard" onclick="selectCheckoutPlan('standard')" style="font-size:12px;">
+          <strong>8 Odds</strong><br>KES 149
+        </button>
+        <button class="payment-opt checkout-plan-opt" data-plan="premium" onclick="selectCheckoutPlan('premium')" style="font-size:12px;">
+          <strong>10 Odds</strong><br>KES 199
+        </button>
+      </div>
+
+      <div class="checkout-summary">
+        <div class="checkout-row">
+          <span>Package</span>
+          <span id="checkout-plan-name">Standard Plan</span>
+        </div>
+        <div class="checkout-row">
+          <span>Odds Included</span>
+          <span id="checkout-plan-odds">8 Odds</span>
+        </div>
+        <div class="checkout-row total">
+          <span>Total</span>
+          <span id="checkout-plan-price">KES 149</span>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-3); margin-bottom:10px;">Payment Method</p>
+      <div class="payment-options">
+        <button class="payment-opt selected" data-method="paystack" onclick="selectPayment('paystack')">
+          💳 Paystack / M-Pesa
+        </button>
+        <button class="payment-opt" data-method="paypal" onclick="selectPayment('paypal')">
+          🅿️ PayPal
+        </button>
+      </div>
+
+      <button id="pay-btn" class="btn btn-gold btn-full btn-lg">Pay Now →</button>
+      <p style="font-size:11px; color:var(--text-3); text-align:center; margin-top:10px;">
+        🔒 Secure payment · Instant access after payment
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Toast Container ────────────────────────────────────── -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

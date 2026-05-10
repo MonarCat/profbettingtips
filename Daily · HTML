@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Odds — Professional Betting Tips</title>
+  <meta name="description" content="Today's expert football predictions. Daily odds — 4 picks at KES 99, 8 picks at KES 149, 10 picks at KES 199.">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="daily">
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">PB</div>
+        <div class="nav-logo-text">Pro<span>Betting</span>Tips</div>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/daily.html" class="active">Daily Odds</a>
+        <a href="/weekend.html">Weekend Odds</a>
+        <a href="/monthly.html">Monthly Odds</a>
+        <a href="/highlights.html">Highlights</a>
+        <a href="/pricing.html">Premium</a>
+      </div>
+      <div class="nav-actions">
+        <button id="nav-login-btn" class="btn btn-outline btn-sm" onclick="openAuthModal('login')">Sign In</button>
+        <div id="nav-user-menu" class="hidden flex items-center gap-8">
+          <a href="/account.html" class="btn btn-ghost btn-sm" id="nav-user-name">Account</a>
+          <button class="btn btn-outline btn-sm" onclick="signOut()">Out</button>
+        </div>
+        <button id="hamburger" class="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="mobile-nav" class="mobile-nav">
+    <a href="/">🏠 Home</a>
+    <a href="/daily.html">⚽ Daily Odds</a>
+    <a href="/weekend.html">📅 Weekend Odds</a>
+    <a href="/monthly.html">📆 Monthly Odds</a>
+    <a href="/highlights.html">🎬 Highlights</a>
+    <a href="/pricing.html">⭐ Premium</a>
+    <a href="/account.html">👤 My Account</a>
+  </div>
+
+  <div class="ticker-bar">
+    <div class="ticker-label">⚽ Today</div>
+    <div class="ticker-track">
+      <div class="ticker-content" id="ticker-content">
+        <span class="ticker-item">Loading today's matches...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="ad-slot ad-slot-banner">Monetag Ad — 728×90</div>
+  </div>
+
+  <div class="container">
+    <div class="page-title">
+      <div class="section-tag">Updated Daily</div>
+      <h1>Daily Odds</h1>
+      <p>Expert predictions posted every morning by 9:00 AM EAT. Free tips visible to all — premium tips unlocked by purchase.</p>
+    </div>
+
+    <!-- Date display -->
+    <div class="flex items-center justify-between mb-24">
+      <div class="flex items-center gap-12">
+        <div class="section-tag" id="today-date" style="font-size:13px; padding:6px 14px;">Loading date...</div>
+        <div class="live-badge"><span class="dot"></span> Live Updates</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','standard')">🔓 Unlock All Tips</button>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filter-row">
+      <button class="filter-chip active" data-filter="all">All Leagues</button>
+      <button class="filter-chip" data-filter="premier league">Premier League</button>
+      <button class="filter-chip" data-filter="la liga">La Liga</button>
+      <button class="filter-chip" data-filter="champions">Champions League</button>
+      <button class="filter-chip" data-filter="serie a">Serie A</button>
+      <button class="filter-chip" data-filter="bundesliga">Bundesliga</button>
+    </div>
+
+    <!-- Free Tips Section -->
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Free</div>
+        <h2>Free Tips</h2>
+      </div>
+    </div>
+    <div class="tips-grid mb-32" id="free-tips-grid">
+      <!-- Loaded by JS or shown as static -->
+      <div class="tip-card">
+        <div class="tip-card-header"><span class="league-tag">Premier League</span><span class="tip-time">20:00</span></div>
+        <div class="tip-body">
+          <div class="tip-teams"><span class="home">Man City</span><span class="vs-small">VS</span><span class="away">Arsenal</span></div>
+          <div class="tip-meta">
+            <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">Home Win</div></div>
+            <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">2.10</div></div>
+            <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">88%</div></div>
+            <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-card-header"><span class="league-tag">La Liga</span><span class="tip-time">21:00</span></div>
+        <div class="tip-body">
+          <div class="tip-teams"><span class="home">Real Madrid</span><span class="vs-small">VS</span><span class="away">Barcelona</span></div>
+          <div class="tip-meta">
+            <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">BTTS</div></div>
+            <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">1.85</div></div>
+            <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">82%</div></div>
+            <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="ad-slot ad-slot-banner">Monetag Ad — 728×90</div>
+    </div>
+
+    <!-- Premium Tips Section -->
+    <div class="section-head mt-32">
+      <div>
+        <div class="section-tag">Premium</div>
+        <h2>Premium Tips</h2>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','starter')">4 Odds — KES 99</button>
+        <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','standard')">8 Odds — KES 149</button>
+        <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','premium')">10 Odds — KES 199</button>
+      </div>
+    </div>
+    <div class="tips-grid" id="predictions-grid">
+      <!-- Loaded by JS -->
+      <div class="tip-card premium-locked">
+        <div class="tip-card-header"><span class="league-tag">Champions League</span><span class="tip-time">21:00</span></div>
+        <div class="tip-body">
+          <div class="tip-teams"><span class="home">PSG</span><span class="vs-small">VS</span><span class="away">Dortmund</span></div>
+          <div class="tip-meta">
+            <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">?????</div></div>
+            <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">?.??</div></div>
+            <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">??%</div></div>
+            <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+          </div>
+        </div>
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-text">Premium Tip</div>
+          <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','standard')">Unlock — KES 149</button>
+        </div>
+      </div>
+      <div class="tip-card premium-locked">
+        <div class="tip-card-header"><span class="league-tag">Bundesliga</span><span class="tip-time">20:30</span></div>
+        <div class="tip-body">
+          <div class="tip-teams"><span class="home">Bayern Munich</span><span class="vs-small">VS</span><span class="away">Dortmund</span></div>
+          <div class="tip-meta">
+            <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">?????</div></div>
+            <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">?.??</div></div>
+            <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">??%</div></div>
+            <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+          </div>
+        </div>
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-text">Premium Tip</div>
+          <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','standard')">Unlock — KES 149</button>
+        </div>
+      </div>
+      <div class="tip-card premium-locked">
+        <div class="tip-card-header"><span class="league-tag">Serie A</span><span class="tip-time">20:45</span></div>
+        <div class="tip-body">
+          <div class="tip-teams"><span class="home">Juventus</span><span class="vs-small">VS</span><span class="away">Roma</span></div>
+          <div class="tip-meta">
+            <div class="tip-meta-item"><div class="key">Prediction</div><div class="val green">?????</div></div>
+            <div class="tip-meta-item"><div class="key">Odds</div><div class="val gold">?.??</div></div>
+            <div class="tip-meta-item"><div class="key">Confidence</div><div class="val">??%</div></div>
+            <div class="tip-meta-item"><div class="key">Result</div><div class="val text-dim">Pending</div></div>
+          </div>
+        </div>
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-text">Premium Tip</div>
+          <button class="btn btn-gold btn-sm" onclick="openCheckoutModal('daily','standard')">Unlock — KES 149</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Banner -->
+    <div class="fb-cta-section mt-32" style="padding:32px;">
+      <div>
+        <h2 style="font-size:28px;">Unlock All <span class="text-gold">Today's Tips</span></h2>
+        <p style="color:var(--text-2); margin-top:8px;">From KES 99 — get 4 to 10 expert predictions with full analysis</p>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-outline" onclick="openCheckoutModal('daily','starter')">4 Odds — KES 99</button>
+        <button class="btn btn-gold" onclick="openCheckoutModal('daily','standard')">8 Odds — KES 149</button>
+        <button class="btn btn-outline" onclick="openCheckoutModal('daily','premium')">10 Odds — KES 199</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="padding-top:0;">
+        <span>© 2025 Professional Betting Tips. <a href="/terms.html" style="color:var(--text-3);">Terms</a> · <a href="/privacy.html" style="color:var(--text-3);">Privacy</a></span>
+        <span>⚠️ Gamble responsibly. 18+</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal" style="position:relative;">
+      <button class="modal-close" onclick="closeAuthModal()">×</button>
+      <div id="auth-mode" data-mode="login">
+        <h2 id="auth-title">Welcome Back</h2>
+        <p id="auth-subtitle">Sign in to access your premium tips</p>
+        <form id="auth-form">
+          <div class="form-group hidden" id="auth-name-group">
+            <label for="auth-name">Full Name</label>
+            <input type="text" id="auth-name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="auth-email">Email Address</label>
+            <input type="email" id="auth-email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" id="auth-submit-btn" class="btn btn-gold btn-full mt-16">Sign In</button>
+        </form>
+        <p class="mt-16" style="font-size:13px; color:var(--text-3); text-align:center;" id="auth-switch-link">
+          Don't have an account? <a href="#" onclick="setAuthMode('signup')" style="color:var(--gold);">Create one</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal" style="position:relative; max-width:460px;">
+      <button class="modal-close" onclick="closeCheckoutModal()">×</button>
+      <h2>Unlock <span id="checkout-category">Daily Odds</span></h2>
+      <p>Select your package and complete payment instantly.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px;">
+        <button class="payment-opt checkout-plan-opt" data-plan="starter" onclick="selectCheckoutPlan('starter')" style="font-size:12px;"><strong>4 Odds</strong><br>KES 99</button>
+        <button class="payment-opt checkout-plan-opt selected" data-plan="standard" onclick="selectCheckoutPlan('standard')" style="font-size:12px;"><strong>8 Odds</strong><br>KES 149</button>
+        <button class="payment-opt checkout-plan-opt" data-plan="premium" onclick="selectCheckoutPlan('premium')" style="font-size:12px;"><strong>10 Odds</strong><br>KES 199</button>
+      </div>
+      <div class="checkout-summary">
+        <div class="checkout-row"><span>Package</span><span id="checkout-plan-name">Standard Plan</span></div>
+        <div class="checkout-row"><span>Odds</span><span id="checkout-plan-odds">8 Odds</span></div>
+        <div class="checkout-row total"><span>Total</span><span id="checkout-plan-price">KES 149</span></div>
+      </div>
+      <p style="font-size:12px; color:var(--text-3); margin-bottom:10px;">Payment Method</p>
+      <div class="payment-options">
+        <button class="payment-opt selected" data-method="paystack" onclick="selectPayment('paystack')">💳 Paystack / M-Pesa</button>
+        <button class="payment-opt" data-method="paypal" onclick="selectPayment('paypal')">🅿️ PayPal</button>
+      </div>
+      <button id="pay-btn" class="btn btn-gold btn-full btn-lg">Pay Now →</button>
+      <p style="font-size:11px; color:var(--text-3); text-align:center; margin-top:10px;">🔒 Secure · Instant access</p>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>
